@@ -1,0 +1,7 @@
+/lib/src/main/java/com/myworldvw/webgpu/
+/.gradle/
+/.idea/
+/lib/build/
+/natives/bin/
+/natives/build/
+/demo/build/

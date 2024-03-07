@@ -1,0 +1,15 @@
+plugins {
+    id 'de.undercouch.download' version '4.1.1'
+}
+
+apply plugin: 'de.undercouch.download'
+
+task download(type: Download) {
+    src 'https://github.com/gfx-rs/wgpu-native/releases/download/v0.19.1.1/wgpu-linux-x86_64-debug.zip'
+    dest 'bin/v0.19.1.1/linux-x86_64-debug.zip'
+}
+
+task unzip(type: Copy) {
+    from zipTree('bin/v0.19.1.1/linux-x86_64-debug.zip')
+    into 'bin/v0.19.1.1/linux-x86_64-debug'
+}

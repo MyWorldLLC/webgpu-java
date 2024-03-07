@@ -1,0 +1,47 @@
+import java.nio.file.Paths
+
+plugins {
+    id 'java-library'
+}
+
+def jextractHome = project.hasProperty('jextract.home')
+        ? project.property('jextract.home')
+        : "/set/real/jextract/home/via/gradle/build/property"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+tasks.compileJava {
+    options.compilerArgs.add("--enable-preview")
+}
+
+task invokeJextract(type: Exec){
+    executable Paths.get(jextractHome as String, 'bin', 'jextract')
+    args (
+        'src/main/c/webgpu.h',
+        '--source',
+        '-t', 'com.myworldvw.webgpu',
+        '--output', 'src/main/java'
+    )
+}
+
+task cleanupExtras(type: Delete, dependsOn: invokeJextract){
+    // Delete extra files that jextract generates from included system headers that we don't
+    // actually need to have. These may be different on different platforms - max_align_t.java
+    // & __fsid_t.java are generated when jextract is run on Linux. WebGPU doesn't define
+    // any *_t types, so we can delete these by regex.
+    delete fileTree('src/main/java/com/myworldvw/webgpu/').matching {
+        include '*_t.java'
+    }
+
+}
+
+task jextract(dependsOn: [invokeJextract, cleanupExtras])
