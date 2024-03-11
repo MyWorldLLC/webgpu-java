@@ -40,6 +40,9 @@ tasks.compileJava {
 }
 
 task invokeJextract(type: Exec){
+    doFirst {
+        file('build/bindings').mkdirs()
+    }
     if(jextractHome){
         executable Paths.get(jextractHome as String, 'bin', 'jextract')
     }else{
