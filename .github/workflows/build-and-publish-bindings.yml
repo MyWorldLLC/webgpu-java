@@ -11,6 +11,7 @@ jobs:
       - run: mkdir $RUNNER_TEMP/jextract
       - run: wget -O $RUNNER_TEMP/jextract/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
       - run: tar -xf $RUNNER_TEMP/jextract/jdk.tar.gz
+      - run: ls $RUNNER_TEMP/jextract && ls $RUNNER_TEMP/jextract/jextract-22
       - uses: actions/setup-java@v4
         id: install-jdk
         with:
