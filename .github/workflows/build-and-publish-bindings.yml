@@ -27,7 +27,10 @@ jobs:
       - name: Extract natives
         run: ./gradlew -PwgpuVersion='v0.19.1.1' :natives:unzip
 
-      - run: ls /home/runner/work/webgpu-java/webgpu-java/natives/build/tmp
+      - name: Copy headers
+        run: ./gradlew -PwgpuVersion='v0.19.1.1' ':natives:copyWgpuHeaders'
+
+      - run: ls /home/runner/work/webgpu-java/webgpu-java/natives/build/tmp && ls /home/runner/work/webgpu-java/webgpu-java/natives/build/headers
 
       - name: Generate bindings
         run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings

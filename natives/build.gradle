@@ -23,7 +23,7 @@ task unzip(type: Copy) {
     into "bin/$wgpuVersion/$os-$arch-$type"
 }
 
-task obtainWgpuHeader(type: Copy, dependsOn: [download, unzip]) {
+task copyWgpuHeaders(type: Copy) {
     from "bin/$wgpuVersion/$os-$arch-$type/webgpu.h"
     into 'build/headers/'
 }
