@@ -72,7 +72,7 @@ task cleanupExtras(type: Delete, dependsOn: invokeJextract){
 
 task jextract(dependsOn: [invokeJextract, cleanupExtras])
 
-task bindings(type: Copy, dependsOn: [jextract, jar]){
+task bindings(type: Copy, dependsOn: [jextract, assemble]){
     from jar
     into 'build'
 }

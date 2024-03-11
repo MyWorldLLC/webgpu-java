@@ -30,10 +30,10 @@ jobs:
       - name: Copy headers
         run: ./gradlew -PwgpuVersion='v0.19.1.1' ':natives:copyWgpuHeaders'
 
-      - run: ls /home/runner/work/webgpu-java/webgpu-java/natives/build/tmp && ls /home/runner/work/webgpu-java/webgpu-java/natives/build/headers
-
       - name: Generate bindings
         run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
+
+      - run: ls /home/runner/work/webgpu-java/webgpu-java/lib/build/classes
 
       - name: Publish bindings
         uses: actions/upload-artifact@v4
