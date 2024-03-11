@@ -66,7 +66,7 @@ task cleanupExtras(type: Delete, dependsOn: invokeJextract){
 
 task jextract(dependsOn: [invokeJextract, cleanupExtras])
 
-task publish(type: Copy, dependsOn: [jextract, jar]){
+task bindings(type: Copy, dependsOn: [jextract, jar]){
     from jar
     into 'build'
 }
