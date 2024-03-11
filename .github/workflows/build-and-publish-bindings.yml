@@ -14,7 +14,6 @@ jobs:
       - uses: actions/setup-java@v4
         id: install-jdk
         with:
-          cache: gradle
           java-version: 21
           distribution: temurin
 
