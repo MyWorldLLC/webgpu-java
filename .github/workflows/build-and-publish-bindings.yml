@@ -13,7 +13,7 @@ jobs:
         with:
           cache: gradle
           java-version: 21
-          distribution: temurin
+          distribution: jdkfile
           jdkFile: https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
 
       - name: Setup Gradle
