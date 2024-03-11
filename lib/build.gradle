@@ -27,6 +27,10 @@ java {
     }
 }
 
+jar {
+    archiveBaseName = 'webgpu'
+}
+
 sourceSets {
     main {
         java {
