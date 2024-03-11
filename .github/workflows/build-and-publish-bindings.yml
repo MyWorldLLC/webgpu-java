@@ -34,3 +34,6 @@ jobs:
 
       - name: Generate bindings
         run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
+
+      - name: Publish bindings
+        run: ls lib/build
