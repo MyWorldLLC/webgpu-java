@@ -18,12 +18,12 @@ task download(type: Download) {
     dest "bin/$wgpuVersion/$os-$arch-${type}.zip"
 }
 
-task unzip(type: Copy, dependsOn: download) {
+task unzip(type: Copy) {
     from zipTree("bin/$wgpuVersion/$os-$arch-${type}.zip")
     into "bin/$wgpuVersion/$os-$arch-$type"
 }
 
-task obtainWgpuHeader(type: Copy, dependsOn: unzip) {
+task obtainWgpuHeader(type: Copy, dependsOn: [download, unzip]) {
     from "bin/$wgpuVersion/$os-$arch-$type/webgpu.h"
     into 'build/headers/'
 }
