@@ -4,12 +4,30 @@ plugins {
 
 apply plugin: 'de.undercouch.download'
 
-task download(type: Download) {
-    src 'https://github.com/gfx-rs/wgpu-native/releases/download/v0.19.1.1/wgpu-linux-x86_64-debug.zip'
-    dest 'bin/v0.19.1.1/linux-x86_64-debug.zip'
+configurations {
+    headers
 }
 
-task unzip(type: Copy) {
-    from zipTree('bin/v0.19.1.1/linux-x86_64-debug.zip')
-    into 'bin/v0.19.1.1/linux-x86_64-debug'
+def wgpuVersion = project.findProperty('wgpuVersion')
+def os = project.hasProperty('os') ? project.findProperty('os') : 'linux'
+def arch = project.hasProperty('arch') ? project.findProperty('arch') : 'x86_64'
+def type = project.hasProperty('type') ? project.findProperty('type') : 'debug'
+
+task download(type: Download) {
+    src "https://github.com/gfx-rs/wgpu-native/releases/download/$wgpuVersion/wgpu-$os-$arch-${type}.zip"
+    dest "bin/$wgpuVersion/$os-$arch-${type}.zip"
+}
+
+task unzip(type: Copy, dependsOn: download) {
+    from zipTree("bin/$wgpuVersion/$os-$arch-${type}.zip")
+    into "bin/$wgpuVersion/$os-$arch-$type"
+}
+
+task obtainWgpuHeader(type: Copy, dependsOn: unzip) {
+    from "bin/$wgpuVersion/$os-$arch-$type/webgpu.h"
+    into 'build/headers/'
+}
+
+artifacts {
+    headers file('build/headers/webgpu.h')
 }

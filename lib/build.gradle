@@ -4,9 +4,17 @@ plugins {
     id 'java-library'
 }
 
+configurations {
+    headers
+}
+
+dependencies {
+    headers project(path: ":natives", configuration: 'headers')
+}
+
 def jextractHome = project.hasProperty('jextract.home')
         ? project.property('jextract.home')
-        : "/set/real/jextract/home/via/gradle/build/property"
+        : null
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -19,17 +27,29 @@ java {
     }
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs += 'build/bindings'
+        }
+    }
+}
+
 tasks.compileJava {
     options.compilerArgs.add("--enable-preview")
 }
 
 task invokeJextract(type: Exec){
-    executable Paths.get(jextractHome as String, 'bin', 'jextract')
+    if(jextractHome){
+        executable Paths.get(jextractHome as String, 'bin', 'jextract')
+    }else{
+        executable 'jextract'
+    }
     args (
-        'src/main/c/webgpu.h',
+        configurations.headers.files[0],
         '--source',
         '-t', 'com.myworldvw.webgpu',
-        '--output', 'src/main/java'
+        '--output', 'build/bindings'
     )
 }
 
@@ -38,10 +58,15 @@ task cleanupExtras(type: Delete, dependsOn: invokeJextract){
     // actually need to have. These may be different on different platforms - max_align_t.java
     // & __fsid_t.java are generated when jextract is run on Linux. WebGPU doesn't define
     // any *_t types, so we can delete these by regex.
-    delete fileTree('src/main/java/com/myworldvw/webgpu/').matching {
+    delete fileTree('build/bindings/com/myworldvw/webgpu/').matching {
         include '*_t.java'
     }
 
 }
 
 task jextract(dependsOn: [invokeJextract, cleanupExtras])
+
+task publish(type: Copy, dependsOn: [jextract, jar]){
+    from jar
+    into 'build'
+}
