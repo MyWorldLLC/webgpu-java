@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: wget -O $RUNNER_TEMP/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
       - run: tar -xf $RUNNER_TEMP/jdk.tar.gz
-      - run: pwd && echo $HOME && ls jextract-22
+      - run: echo "JEXTRACT_HOME=$(pwd)/jextract-22" >> $GITHUB_ENV
       - uses: actions/setup-java@v4
         id: install-jdk
         with:
@@ -28,4 +28,4 @@ jobs:
         run: ./gradlew -PwgpuVersion='v0.19.1.1' :natives:unzip
 
       - name: Generate bindings
-        run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=jextract-22 :lib:bindings --info --stacktrace
+        run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings --info --stacktrace
