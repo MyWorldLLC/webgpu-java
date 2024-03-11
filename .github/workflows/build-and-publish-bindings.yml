@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: mkdir $RUNNER_TEMP/jextract
       - run: wget -O $RUNNER_TEMP/jextract/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
       - run: tar -xf $RUNNER_TEMP/jextract/jdk.tar.gz
       - uses: actions/setup-java@v4
