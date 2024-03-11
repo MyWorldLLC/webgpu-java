@@ -15,7 +15,7 @@ jobs:
           cache: gradle
           java-version: 21
           distribution: jdkfile
-          jdkFile: $RUNNER_TEMP/jdk.tar.gz
+          jdkFile: ${{ runner.temp }}/jdk.tar.gz
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
