@@ -33,7 +33,7 @@ jobs:
       - name: Generate bindings
         run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
 
-      - run: ls /home/runner/work/webgpu-java/webgpu-java/lib/build/classes
+      - run: ls /home/runner/work/webgpu-java/webgpu-java/lib/build/
 
       - name: Publish bindings
         uses: actions/upload-artifact@v4
