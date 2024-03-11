@@ -8,13 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: wget -O $RUNNER_TEMP/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
       - uses: actions/setup-java@v4
         id: install-jextract
         with:
           cache: gradle
           java-version: 21
           distribution: jdkfile
-          jdkFile: https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
+          jdkFile: $RUNNER_TEMP/jdk.tar.gz
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
