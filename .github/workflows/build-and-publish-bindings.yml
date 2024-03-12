@@ -1,8 +1,16 @@
-name: Build and Publish
+name: Build and Publish Bindings
 on:
   push:
   release:
     types: [created, edited]
+  workflow_call:
+    inputs:
+      wgpuVersion:
+        description: 'WGPU version to build bindings for'
+        default: 'v0.19.1.1'
+        required: false
+        type: string
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,18 +31,18 @@ jobs:
           gradle-version: wrapper
 
       - name: Download natives
-        run: ./gradlew -PwgpuVersion='v0.19.1.1' :natives:download
+        run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} :natives:download
 
       - name: Extract natives
-        run: ./gradlew -PwgpuVersion='v0.19.1.1' :natives:unzip
+        run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} :natives:unzip
 
       - name: Copy headers
-        run: ./gradlew -PwgpuVersion='v0.19.1.1' ':natives:copyWgpuHeaders'
+        run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} ':natives:copyWgpuHeaders'
 
       - name: Generate bindings
-        run: ./gradlew -PwgpuVersion='v0.19.1.1' -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
+        run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
 
-      - name: Publish bindings
+      - name: Publish bindings as artifact
         uses: actions/upload-artifact@v4
         with:
           name: webgpu-bindings
