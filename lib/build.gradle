@@ -82,6 +82,8 @@ task bindings(type: Copy, dependsOn: [jextract, jar]){
     into 'build'
 }
 
+tasks.findByName('publish').dependsOn bindings
+
 publishing {
     publications {
         maven(MavenPublication) {
