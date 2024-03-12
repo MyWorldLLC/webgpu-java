@@ -1,0 +1,331 @@
+name: Scheduled Release Check
+on:
+  schedule:
+    - cron: 0 12 * * *
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pozetroninc/github-action-get-latest-release@master
+        name: Get WGPU release
+        id: wgpu_release
+        with:
+          repository: gfx-rs/wgpu-native
+      - uses: pozetroninc/github-action-get-latest-release@master
+        name: Get local release
+        id: local_release
+        with:
+          repository: MyWorldLLC/webgpu-java
+      - name: Compare versions
+        id: compare_versions
+        run: echo "NEEDS_BUILD=$(${{ steps.wgpu_release.outputs.release }} != ${{ steps.local_release.outputs.release }})" >> "$GITHUB_OUTPUT"
+
+      - name: Report match
+        run: echo "Versions match? ${{ steps.compare_versions.outputs.NEEDS_BUILD }}"
+
+      - name: Create release
+        uses: softprops/action-gh-release@master
+        if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
+        with:
+          draft: true
+          tag_name: ${{ steps.wgpu_release.outputs.release }}
+
+      - name: Build bindings
+        uses: myworldllc/webgpu-java/.workflows/build-and-publish-bindings.yml
+        if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
+        with:
+          wgpuVersion: ${{ steps.wgpu_release.outputs.release }}
+          # TODO - pass release URL to upload assets
+
+      - name: Build native modules
+        if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
+        run: echo "TODO - build native modules"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
