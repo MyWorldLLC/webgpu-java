@@ -2,7 +2,10 @@ import java.nio.file.Paths
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
+
+def wgpuVersion = project.findProperty('wgpuVersion')
 
 configurations {
     headers
@@ -77,4 +80,27 @@ tasks.findByName('compileJava').dependsOn jextract
 task bindings(type: Copy, dependsOn: [jextract, jar]){
     from jar
     into 'build'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.myworldvw'
+            artifactId = 'webgpu-java'
+            version = "$wgpuVersion"
+
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            name = "GHPackages"
+            url = uri("https://maven.pkg.github.com/MyWorldLLC/webgpu-java")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }

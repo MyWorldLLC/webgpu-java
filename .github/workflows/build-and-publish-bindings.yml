@@ -44,3 +44,9 @@ jobs:
         with:
           name: webgpu-bindings
           path: lib/build/webgpu.jar
+
+      - name: Build & Publish
+        run: ./gradlew :lib:publish
+        env:
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.PKG_PUBLISHING_AUTH_TOKEN }}
