@@ -1,8 +1,5 @@
 name: Build and Publish Bindings
 on:
-  push:
-  release:
-    types: [created, edited]
   workflow_dispatch:
     inputs:
       wgpuVersion:
