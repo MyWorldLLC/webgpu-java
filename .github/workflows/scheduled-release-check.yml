@@ -33,7 +33,7 @@ jobs:
           tag_name: ${{ steps.wgpu_release.outputs.release }}
 
       - name: Build bindings
-        uses: myworldllc/webgpu-java/.workflows/build-and-publish-bindings.yml@main
+        uses: myworldllc/webgpu-java/.github/workflows/build-and-publish-bindings.yml@main
         if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
         with:
           wgpuVersion: ${{ steps.wgpu_release.outputs.release }}
