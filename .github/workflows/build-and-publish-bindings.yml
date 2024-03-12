@@ -37,13 +37,16 @@ jobs:
         run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} ':natives:copyWgpuHeaders'
 
       - name: Generate & publish bindings
-        run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:publish
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.PKG_PUBLISHING_AUTH_TOKEN }}
+        run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
 
       - name: Publish bindings as artifact
         uses: actions/upload-artifact@v4
         with:
           name: webgpu-bindings
           path: lib/build/webgpu.jar
+
+      - name: Publish bindings to GH packages
+        run: ./gradlew :lib:publish
+        env:
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.PKG_PUBLISHING_AUTH_TOKEN }}

@@ -82,8 +82,6 @@ task bindings(type: Copy, dependsOn: [jextract, jar]){
     into 'build'
 }
 
-tasks.findByName('publish').dependsOn bindings
-
 publishing {
     publications {
         maven(MavenPublication) {
@@ -91,7 +89,7 @@ publishing {
             artifactId = 'webgpu-java'
             version = "$wgpuVersion"
 
-            from components.java
+            artifact file("build/bindings/${jar.name}")
         }
     }
     repositories {
