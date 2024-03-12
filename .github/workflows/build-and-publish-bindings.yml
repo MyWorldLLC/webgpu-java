@@ -3,7 +3,7 @@ on:
   push:
   release:
     types: [created, edited]
-  workflow_call:
+  workflow_dispatch:
     inputs:
       wgpuVersion:
         description: 'WGPU version to build bindings for'
