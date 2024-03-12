@@ -89,7 +89,7 @@ publishing {
             artifactId = 'webgpu-java'
             version = "$wgpuVersion"
 
-            artifact file("build/bindings/${jar.name}")
+            artifact file("build/bindings/webgpu.jar")
         }
     }
     repositories {
