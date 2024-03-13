@@ -36,6 +36,7 @@ jobs:
         with:
           draft: true
           tag_name: ${{ steps.wgpu_release.outputs.release }}
+          description: ${{ steps.wgpu_release.outputs.description }}
 
   bindings:
     needs: [check]
