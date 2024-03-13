@@ -37,6 +37,7 @@ jobs:
           draft: false
           prerelease: false
           make_latest: 'true'
+          body: "Automatically generated bindings for https://github.com/gfx-rs/wgpu-native"
           tag_name: ${{ steps.wgpu_release.outputs.release }}
 
   bindings:
@@ -45,7 +46,6 @@ jobs:
     if: ${{ needs.check.outputs.needs_build }}
     with:
       wgpuVersion: ${{ needs.check.outputs.release }}
-      uploadUrl: ${{ needs.check.outputs.upload_url }}
 
   natives:
     runs-on: ubuntu-latest
