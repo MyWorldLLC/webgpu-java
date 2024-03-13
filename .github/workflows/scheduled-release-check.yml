@@ -34,7 +34,7 @@ jobs:
           draft: false
           prerelease: false
           make_latest: 'true'
-          body: "Automatically generated bindings for https://github.com/gfx-rs/wgpu-native"
+          body: "Automatically generated bindings for https://github.com/gfx-rs/wgpu-native. Supports Java 22."
           tag_name: ${{ steps.wgpu_release.outputs.release }}
 
   bindings:
