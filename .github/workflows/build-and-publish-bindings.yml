@@ -14,7 +14,9 @@ on:
         default: 'v0.19.1.1'
         required: true
         type: string
-
+    secrets:
+      PKG_PUBLISHING_AUTH_TOKEN:
+        required: true
 jobs:
   build:
     runs-on: ubuntu-latest

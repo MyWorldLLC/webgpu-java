@@ -43,6 +43,8 @@ jobs:
     if: ${{ needs.check.outputs.needs_build == 'true' }}
     with:
       wgpuVersion: ${{ needs.check.outputs.release }}
+    secrets:
+      PKG_PUBLISHING_AUTH_TOKEN: ${{ secrets.PKG_PUBLISHING_AUTH_TOKEN }}
 
   natives:
     runs-on: ubuntu-latest
