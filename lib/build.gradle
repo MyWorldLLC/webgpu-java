@@ -96,7 +96,7 @@ publishing {
         mavenLocal()
         maven {
             name = "GHPackages"
-            url = uri("https://maven.pkg.github.com/MyWorldLLC/webgpu-java")
+            url = uri("https://maven.pkg.github.com/MyWorldLLC/Packages")
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USER")
                 password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
