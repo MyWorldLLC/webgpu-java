@@ -37,13 +37,6 @@ jobs:
           draft: true
           tag_name: ${{ steps.wgpu_release.outputs.release }}
 
-      - name: Build bindings
-
-
-      - name: Build native modules
-        if: ${{ steps.compare_versions.outputs.needs_build }}
-        run: echo "TODO - build native modules"
-
   bindings:
     needs: [check]
     uses: myworldllc/webgpu-java/.github/workflows/build-and-publish-bindings.yml@main
