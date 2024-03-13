@@ -40,14 +40,14 @@ jobs:
   bindings:
     needs: [check]
     uses: myworldllc/webgpu-java/.github/workflows/build-and-publish-bindings.yml@main
-    if: ${{ jobs.check.outputs.needs_build }}
+    if: ${{ needs.check.outputs.needs_build }}
     with:
-      wgpuVersion: ${{ jobs.check.outputs.release }}
-      uploadUrl: ${{ jobs.check.outputs.upload_url }}
+      wgpuVersion: ${{ needs.check.outputs.release }}
+      uploadUrl: ${{ needs.check.outputs.upload_url }}
 
   natives:
     runs-on: ubuntu-latest
     needs: [check]
-    if: ${{ jobs.check.outputs.needs_build }}
+    if: ${{ needs.check.outputs.needs_build }}
     steps:
       - run: echo "TODO - build natives"
