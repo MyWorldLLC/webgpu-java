@@ -24,7 +24,7 @@ jobs:
           repository: MyWorldLLC/webgpu-java
       - name: Compare versions
         id: compare_versions
-        run: echo "needs_build=$([ '${{ steps.wgpu_release.outputs.release }}' != '${{ steps.local_release.outputs.release }}' ])" >> "$GITHUB_OUTPUT"
+        run: echo "needs_build=${{ steps.wgpu_release.outputs.release != steps.local_release.outputs.release }}" >> "$GITHUB_OUTPUT"
 
       - name: Report match
         run: echo "Versions match? ${{ steps.compare_versions.outputs.needs_build }}"
