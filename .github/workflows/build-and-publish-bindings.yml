@@ -10,14 +10,14 @@ on:
       uploadUrl:
         description: 'Release asset upload URL to upload artifacts to'
         default: ''
-        required: false
+        required: true
         type: string
   workflow_call:
     inputs:
       wgpuVersion:
         description: 'WGPU version to build bindings for'
         default: 'v0.19.1.1'
-        required: false
+        required: true
         type: string
       uploadUrl:
         description: 'Release asset upload URL to upload artifacts to'
