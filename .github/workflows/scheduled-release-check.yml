@@ -7,6 +7,10 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    outputs:
+      needs_build: ${{ steps.compare_versions.outputs.needs_build }}
+      release: ${{ steps.wgpu_release.outputs.release }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - uses: pozetroninc/github-action-get-latest-release@master
         name: Get WGPU release
@@ -20,312 +24,37 @@ jobs:
           repository: MyWorldLLC/webgpu-java
       - name: Compare versions
         id: compare_versions
-        run: echo "NEEDS_BUILD=$(${{ steps.wgpu_release.outputs.release }} != ${{ steps.local_release.outputs.release }})" >> "$GITHUB_OUTPUT"
+        run: echo "needs_build=$(${{ steps.wgpu_release.outputs.release }} != ${{ steps.local_release.outputs.release }})" >> "$GITHUB_OUTPUT"
 
       - name: Report match
-        run: echo "Versions match? ${{ steps.compare_versions.outputs.NEEDS_BUILD }}"
+        run: echo "Versions match? ${{ steps.compare_versions.outputs.needs_build }}"
 
       - name: Create release
         uses: softprops/action-gh-release@master
-        if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
+        id: create_release
+        if: ${{ steps.compare_versions.outputs.needs_build }}
         with:
           draft: true
           tag_name: ${{ steps.wgpu_release.outputs.release }}
 
       - name: Build bindings
-        uses: myworldllc/webgpu-java/.github/workflows/build-and-publish-bindings.yml@main
-        if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
-        with:
-          wgpuVersion: ${{ steps.wgpu_release.outputs.release }}
-          # TODO - pass release URL to upload assets
+
 
       - name: Build native modules
-        if: ${{ steps.compare_versions.outputs.NEEDS_BUILD }}
+        if: ${{ steps.compare_versions.outputs.needs_build }}
         run: echo "TODO - build native modules"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  bindings:
+    needs: [check]
+    uses: myworldllc/webgpu-java/.github/workflows/build-and-publish-bindings.yml@main
+    if: ${{ jobs.check.outputs.needs_build }}
+    with:
+      wgpuVersion: ${{ jobs.check.outputs.release }}
+      uploadUrl: ${{ jobs.check.outputs.upload_url }}
+
+  natives:
+    runs-on: ubuntu-latest
+    needs: [check]
+    if: ${{ jobs.check.outputs.needs_build }}
+    steps:
+      - run: echo "TODO - build natives"

@@ -7,6 +7,11 @@ on:
         default: 'v0.19.1.1'
         required: false
         type: string
+      uploadUrl:
+        description: 'Release asset upload URL to upload artifacts to'
+        default: ''
+        required: false
+        type: string
 
 jobs:
   build:
@@ -50,3 +55,25 @@ jobs:
         env:
           GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.PKG_PUBLISHING_AUTH_TOKEN }}
+
+      - name: Upload release jar
+        uses: actions/upload-release-asset@v1
+        if: ${{ inputs.uploadUrl }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./lib/build/webgpu.jar
+          asset_name: webgpu.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload release pom
+        uses: actions/upload-release-asset@v1
+        if: ${{ inputs.uploadUrl }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./lib/build/publications/maven/pom-default.xml
+          asset_name: pom-default.xml
+          asset_content_type: application/xml
