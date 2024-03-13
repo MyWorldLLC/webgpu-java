@@ -1,7 +1,7 @@
 name: Scheduled Release Check
 on:
   schedule:
-    - cron: 0 12 * * *
+    - cron: 0 0,6,12,18 * * *
   workflow_dispatch:
 
 jobs:
@@ -34,7 +34,9 @@ jobs:
         id: create_release
         if: ${{ steps.compare_versions.outputs.needs_build }}
         with:
-          draft: true
+          draft: false
+          prerelease: false
+          make_latest: 'true'
           tag_name: ${{ steps.wgpu_release.outputs.release }}
 
   bindings:
