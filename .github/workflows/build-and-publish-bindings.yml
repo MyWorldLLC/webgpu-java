@@ -53,7 +53,7 @@ jobs:
       - name: Copy headers
         run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} ':natives:copyWgpuHeaders'
 
-      - name: Generate & publish bindings
+      - name: Generate bindings
         run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} -Pjextract.home=${{ env.JEXTRACT_HOME }} :lib:bindings
 
       - name: Publish bindings as artifact
@@ -66,7 +66,7 @@ jobs:
         run: ./gradlew -PwgpuVersion=${{ inputs.wgpuVersion }} :lib:publish
         env:
           GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.PKG_PUBLISHING_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release jar
         uses: actions/upload-release-asset@v1
