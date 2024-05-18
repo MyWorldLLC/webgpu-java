@@ -9,5 +9,5 @@ a GitHub Action in this repository generates and publishes a corresponding bindi
 The built jar files are published as Maven artifacts in the 
 [MyWorld Package Repository](https://github.com/MyWorldLLC/Packages/packages/2097504).
 Note that it is currently the case that you are responsible for acquiring and packaging
-`wgpu-native` builds for your platform, however, support for publishing these libraries
-as `jlink`-able modules as planned.
+`wgpu-native` builds for your target platform(s), however, support for publishing these
+libraries as `jlink`-able modules is planned.
