@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: wget -O $RUNNER_TEMP/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+3-13_linux-x64_bin.tar.gz
+      - run: wget -O $RUNNER_TEMP/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/3/openjdk-22-jextract+5-33_linux-x64_bin.tar.gz
       - run: tar -xf $RUNNER_TEMP/jdk.tar.gz
       - run: echo "JEXTRACT_HOME=$(pwd)/jextract-22" >> $GITHUB_ENV
       - uses: actions/setup-java@v4
