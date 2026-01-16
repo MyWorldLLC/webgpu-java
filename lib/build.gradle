@@ -1,10 +1,12 @@
 import java.nio.file.Paths
+import org.gradle.internal.os.OperatingSystem
 
 plugins {
     id 'java-library'
     id 'maven-publish'
 }
 
+def isWindows = OperatingSystem.current().isWindows()
 def wgpuVersion = project.findProperty('wgpuVersion')
 
 configurations {
@@ -20,13 +22,13 @@ def jextractHome = project.hasProperty('jextract.home')
         : null
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -50,15 +52,17 @@ task invokeJextract(type: Exec){
     doFirst {
         file('build/bindings').mkdirs()
     }
+    def exeName = isWindows ? 'jextract.bat' : 'jextract'
     if(jextractHome){
-        executable Paths.get(jextractHome as String, 'bin', 'jextract')
+        executable Paths.get(jextractHome as String, 'bin', exeName).toString()
     }else{
-        executable 'jextract'
+        executable exeName
     }
     args (
         configurations.headers.files[0],
         '-t', 'com.myworldvw.webgpu',
-        '--output', 'build/bindings'
+        '--output', 'build/bindings',
+        '--library', 'wgpu_native'
     )
 }
 
@@ -77,8 +81,15 @@ task jextract(dependsOn: [invokeJextract, cleanupExtras])
 
 tasks.findByName('compileJava').dependsOn jextract
 
-task bindings(type: Copy, dependsOn: [jextract, jar]){
+task sourcesJar(type: Jar, dependsOn: jextract) {
+    archiveBaseName = 'webgpu'
+    archiveClassifier = 'sources'
+    from 'build/bindings'
+}
+
+task bindings(type: Copy, dependsOn: [jextract, jar, sourcesJar]){
     from jar
+    from sourcesJar
     into 'build'
 }
 
@@ -90,6 +101,7 @@ publishing {
             version = "$wgpuVersion"
 
             artifact file("build/webgpu.jar")
+            artifact sourcesJar
         }
     }
     repositories {

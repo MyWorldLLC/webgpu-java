@@ -12,19 +12,24 @@ def wgpuVersion = project.findProperty('wgpuVersion')
 def os = project.hasProperty('os') ? project.findProperty('os') : 'linux'
 def arch = project.hasProperty('arch') ? project.findProperty('arch') : 'x86_64'
 def type = project.hasProperty('type') ? project.findProperty('type') : 'debug'
+def toolchain = project.hasProperty('toolchain') ? project.findProperty('toolchain') : (os == 'windows' ? 'msvc' : null)
+
+// Construct the platform string based on OS
+def platformString = (os == 'windows' && toolchain) ? "$os-$arch-$toolchain" : "$os-$arch"
+def fileName = "wgpu-$platformString-${type}.zip"
 
 task download(type: Download) {
-    src "https://github.com/gfx-rs/wgpu-native/releases/download/$wgpuVersion/wgpu-$os-$arch-${type}.zip"
-    dest "bin/$wgpuVersion/$os-$arch-${type}.zip"
+    src "https://github.com/gfx-rs/wgpu-native/releases/download/$wgpuVersion/$fileName"
+    dest "bin/$wgpuVersion/$fileName"
 }
 
 task unzip(type: Copy) {
-    from zipTree("bin/$wgpuVersion/$os-$arch-${type}.zip")
-    into "bin/$wgpuVersion/$os-$arch-$type"
+    from zipTree("bin/$wgpuVersion/$fileName")
+    into "bin/$wgpuVersion/$platformString-$type"
 }
 
 task copyWgpuHeaders(type: Copy) {
-    from "bin/$wgpuVersion/$os-$arch-$type/webgpu.h"
+    from "bin/$wgpuVersion/$platformString-$type/include/webgpu/webgpu.h"
     into 'build/headers/'
 }
 
