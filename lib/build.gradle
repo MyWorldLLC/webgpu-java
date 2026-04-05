@@ -20,13 +20,13 @@ def jextractHome = project.hasProperty('jextract.home')
         : null
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -42,9 +42,7 @@ sourceSets {
     }
 }
 
-tasks.compileJava {
-    options.compilerArgs.add("--enable-preview")
-}
+// FFM is stable in Java 25, no preview flags needed
 
 task invokeJextract(type: Exec){
     doFirst {
@@ -96,7 +94,7 @@ publishing {
         mavenLocal()
         maven {
             name = "GHPackages"
-            url = uri("https://maven.pkg.github.com/MyWorldLLC/Packages")
+            url = uri("https://maven.pkg.github.com/zzuegg/webgpu-java")
             credentials {
                 username = System.getenv("GITHUB_USER") ?: project.findProperty("gpr.user")
                 password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.password")

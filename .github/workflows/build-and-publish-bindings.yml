@@ -20,13 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: wget -O $RUNNER_TEMP/jdk.tar.gz https://download.java.net/java/early_access/jextract/22/5/openjdk-22-jextract+5-33_linux-x64_bin.tar.gz
+      - run: wget -O $RUNNER_TEMP/jdk.tar.gz https://download.java.net/java/early_access/jextract/25/2/openjdk-25-jextract+2-4_linux-x64_bin.tar.gz
       - run: tar -xf $RUNNER_TEMP/jdk.tar.gz
-      - run: echo "JEXTRACT_HOME=$(pwd)/jextract-22" >> $GITHUB_ENV
+      - run: echo "JEXTRACT_HOME=$(pwd)/jextract-25" >> $GITHUB_ENV
       - uses: actions/setup-java@v4
         id: install-jdk
         with:
-          java-version: 21
+          java-version: 25
           distribution: temurin
 
       - name: Setup Gradle
