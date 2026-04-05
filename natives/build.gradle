@@ -23,10 +23,11 @@ task unzip(type: Copy) {
     into "bin/$wgpuVersion/$os-$arch-$type"
 }
 
-task copyWgpuHeaders(type: Copy) {
-    from "bin/$wgpuVersion/$os-$arch-$type/webgpu.h"
-    into 'build/headers/'
-}
+  task copyWgpuHeaders(type: Copy) {                              
+      from "bin/$wgpuVersion/$os-$arch-$type/include/webgpu/webgpu.h"
+      into 'build/headers/'               
+  }
+
 
 artifacts {
     headers file('build/headers/webgpu.h')
